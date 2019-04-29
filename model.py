@@ -24,8 +24,6 @@ whsqrt = tf.sqrt(tf.maximum(wh,1e-2))#[None,7,7,2,2]
 iou_p = tf.nn.sigmoid(tf.reshape(detector_out[...,8:10],tf.concat([ts,[2]],axis=0)))#[None,7,7,2]
 cls = tf.nn.softmax(detector_out[...,10:30])#[None,7,7,20]
 
-
-
 coordxy = (xy+tf.expand_dims(tf.stack(tf.meshgrid(tf.range(th),tf.range(th)),axis=-1),axis=2))/th#[None,7,7,2,2]
 lf = tf.clip_by_value(coordxy-wh/2,0.,1.)#[None,7,7,2,2]
 rt = tf.clip_by_value(coordxy+wh/2,0.,1.)#[None,7,7,2,2]
