@@ -38,8 +38,8 @@ def loadlabel(lbpath,flip=False):
 
 def randomhue(im):
     imhsv = np.array(im.convert('HSV'))
-    imhsv[..., 0] = (imhsv[..., 0] + np.random.randint(10, 50)) % 255
-    imhsv[..., 1] = (imhsv[..., 0] + np.random.randint(10, 50)) % 255
+    imhsv[..., 0] = (imhsv[..., 0] + np.random.randint(0, 30)) % 255
+    imhsv[..., 1] = (imhsv[..., 0] + np.random.randint(0, 30)) % 255
     imhue = Image.fromarray(imhsv, mode='HSV').convert('RGB')
     return imhue
 
@@ -114,10 +114,10 @@ def loaddata(impaths, lbpaths,dim=224):
         imf = im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
         lbmap = loadlabel(lbpath,flip=False)
         lbmapf = loadlabel(lbpath, flip=True)
-        imhue = randomhue(im)
+        #imhue = randomhue(im)
         ret.append(constructlabel(im,lbmap,dim))
         ret.append(constructlabel(imf, lbmapf,dim))
-        ret.append(constructlabel(imhue, lbmap,dim))
+        #ret.append(constructlabel(imhue, lbmap,dim))
     return ret
 
 def getbatch():
