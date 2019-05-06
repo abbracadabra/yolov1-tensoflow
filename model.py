@@ -50,7 +50,6 @@ tf.summary.histogram('whsqrt',whsqrt)
 tf.summary.histogram('iou_p',iou_p)
 tf.summary.histogram('detector_out',detector_out)
 log_all = tf.summary.merge_all()
-writer = tf.summary.FileWriter(log_path,graph=tf.get_default_graph())
 
 
 
