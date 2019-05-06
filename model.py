@@ -21,7 +21,7 @@ tmp = tf.layers.conv2d(tmp,512,(3,3),activation=tf.nn.leaky_relu,padding='SAME')
 detector_out = tf.layers.conv2d(tmp,30,(1,1))#[None,7,7,30]
 xy = tf.nn.sigmoid(tf.reshape(detector_out[...,0:4],tf.concat([ts,[2,2]],axis=0)))#[None,7,7,2,2]
 wh = tf.sigmoid(tf.reshape(detector_out[...,4:8],tf.concat([ts,[2,2]],axis=0)))#[None,7,7,2,2]
-whsqrt = tf.sqrt(tf.maximum(wh,1e-2))#[None,7,7,2,2]
+whsqrt = tf.sqrt(tf.clip_by_value(wh,1e-2,1))#[None,7,7,2,2]
 iou_p = tf.nn.sigmoid(tf.reshape(detector_out[...,8:10],tf.concat([ts,[2]],axis=0)))#[None,7,7,2]
 cls = tf.nn.softmax(detector_out[...,10:30])#[None,7,7,20]
 
@@ -32,7 +32,7 @@ sect = tf.nn.relu(tf.multiply(*tf.unstack(tf.minimum(rt_t,rt)-tf.maximum(lf_t,lf
 union = tf.maximum(tf.multiply(*tf.unstack(rt-lf,axis=-1))+tf.multiply(*tf.unstack(rt_t-lf_t,axis=-1))-sect,1e-2)#[None,7,7,2]
 iou_t = sect/union#[None,7,7,2]
 
-resp_mask = tf.cast(tf.equal(iou_t,tf.maximum(iou_t[...,0:1],iou_t[...,1:2])),tf.float32)*mask_box_s#[None,7,7,2]
+resp_mask = tf.cast(tf.equal(iou_t,tf.reduce_max(iou_t,axis=-1,keepdims=True)),tf.float32)*mask_box_s#[None,7,7,2]
 resp_maskb = tf.tile(tf.expand_dims(resp_mask,axis=-1),[1,1,1,1,2])#[None,7,7,2,2]
 iouerr = tf.reduce_mean((iou_p-iou_t)**2 * tf.where(tf.equal(resp_mask,1.),resp_mask,tf.ones_like(resp_mask)*0.5))
 xyerr = tf.reduce_sum((xy-xy_t)**2 * resp_maskb)/box_num
