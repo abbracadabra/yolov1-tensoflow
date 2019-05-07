@@ -19,10 +19,10 @@ rt_t = coordxy_t+wh_t/2#[None,7,7,2,2]
 tmp = tf.layers.conv2d(detector_inp,256,(3,3),activation=tf.nn.leaky_relu,padding='SAME')
 tmp = tf.layers.conv2d(tmp,512,(3,3),activation=tf.nn.leaky_relu,padding='SAME')
 detector_out = tf.layers.conv2d(tmp,30,(1,1))#[None,7,7,30]
-xy = tf.nn.sigmoid(tf.reshape(detector_out[...,0:4],tf.concat([ts,[2,2]],axis=0)))#[None,7,7,2,2]
+xy = tf.sigmoid(tf.reshape(detector_out[...,0:4],tf.concat([ts,[2,2]],axis=0)))#[None,7,7,2,2]
 wh = tf.sigmoid(tf.reshape(detector_out[...,4:8],tf.concat([ts,[2,2]],axis=0)))#[None,7,7,2,2]
 whsqrt = tf.sqrt(tf.maximum(wh,1e-5))#[None,7,7,2,2]
-iou_p = tf.nn.sigmoid(tf.reshape(detector_out[...,8:10],tf.concat([ts,[2]],axis=0)))#[None,7,7,2]
+iou_p = tf.sigmoid(tf.reshape(detector_out[...,8:10],tf.concat([ts,[2]],axis=0)))#[None,7,7,2]
 cls = tf.nn.softmax(detector_out[...,10:30])#[None,7,7,20]
 
 coordxy = (xy+tf.expand_dims(tf.stack(tf.meshgrid(tf.range(th),tf.range(th)),axis=-1),axis=2))/th#[None,7,7,2,2]
