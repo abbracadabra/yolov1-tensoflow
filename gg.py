@@ -4,10 +4,7 @@ import tensorflow as tf
 from tensorflow import keras
 from util import *
 
-z = tf.constant([2.])
-aa = tf.cast(tf.equal(z,[2.00]),tf.float32)
-
-sess = tf.Session()
-print(sess.run(aa))
+a=2
+print(23*56*(a>=0))
 
 
