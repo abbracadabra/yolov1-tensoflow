@@ -2,6 +2,7 @@
 - definitely yolov1 concepts
 - vgg16 as image encoder
 - trained on voc12 for 4 epochs
+- 7\*7 cells,2 box predicor each cell
 
 ## some examples
 <div>
