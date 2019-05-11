@@ -4,6 +4,10 @@
 - trained on voc12 for 4 epochs
 - 7\*7 cells,2 box predicor each cell,detection layer size is 7\*7\*(2*5+20)
 
+## things i tried
+- dividing detection layer logits by scalar to reduce magnitude before activation,this might ease gradient vanishing
+- linear activation instead of sigmoid for iou predication to ease gradient vanishing because ground truth iou and iou prediction are often near zero due to poor xy and wh prediction at early stage of training.But sometimes linear activation might deviate far from [0,1],making loss explode.
+
 ## some examples
 <div>
   <img src='https://user-images.githubusercontent.com/35487258/57421361-0ccfe200-723e-11e9-9f00-1b71ecd14dd7.jpg'>
